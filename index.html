@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بوت‌کمپ هوش مصنوعی در سلامت</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap');
+
+:root{
+  --bg:#0F2438;
+  --bg-deep:#0A1B2B;
+  --panel:#16314A;
+  --panel-2:#1D3F5E;
+  --trace:#E8A33D;
+  --trace-soft:#C97F2A;
+  --cyan:#5BD1C9;
+  --pulse:#FF6B6B;
+  --text:#EAF2F8;
+  --muted:#90A9BE;
+  --line:rgba(255,255,255,0.08);
+}
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+
+body{
+  font-family:'Vazirmatn', sans-serif;
+  background:var(--bg-deep);
+  color:var(--text);
+  direction:rtl;
+}
+
+.poster{
+  max-width:980px;
+  margin:0 auto;
+  background:var(--bg);
+  background-image:
+    repeating-linear-gradient(0deg, var(--line) 0 1px, transparent 1px 64px),
+    repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px 64px);
+  overflow:hidden;
+  position:relative;
+}
+
+/* ===== HERO ===== */
+.hero{
+  padding:60px 56px 30px;
+  position:relative;
+}
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  color:var(--cyan);
+  font-weight:700;
+  font-size:0.95rem;
+  letter-spacing:0.5px;
+  margin-bottom:22px;
+}
+.eyebrow .chip{
+  width:14px; height:14px;
+  background:var(--trace);
+  position:relative;
+  flex:none;
+}
+.eyebrow .chip::before, .eyebrow .chip::after{
+  content:"";
+  position:absolute;
+  background:var(--trace);
+}
+.eyebrow .chip::before{ width:4px; height:4px; top:-4px; right:5px; }
+.eyebrow .chip::after{ width:4px; height:4px; bottom:-4px; right:5px; }
+
+h1{
+  font-size:clamp(2.1rem, 5vw, 3.4rem);
+  font-weight:900;
+  line-height:1.35;
+  margin-bottom:14px;
+  background:linear-gradient(90deg, #FFFFFF 35%, var(--cyan));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.subtitle{
+  font-size:1.15rem;
+  font-weight:500;
+  color:var(--muted);
+  max-width:600px;
+  line-height:2;
+  margin-bottom:28px;
+}
+
+/* pulse / circuit line */
+.pulse-wrap{
+  width:100%;
+  margin:8px 0 30px;
+  opacity:0.85;
+}
+.pulse-wrap svg{ width:100%; height:46px; display:block; }
+
+.stats{
+  display:flex;
+  gap:18px;
+  flex-wrap:wrap;
+}
+.stat{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:16px 22px;
+  min-width:140px;
+  position:relative;
+  border-top:2px solid var(--trace);
+}
+.stat .num{
+  font-size:2rem;
+  font-weight:800;
+  color:var(--cyan);
+  line-height:1.2;
+}
+.stat .lbl{
+  font-size:0.85rem;
+  color:var(--muted);
+  font-weight:500;
+}
+
+/* ===== ROADMAP ===== */
+.roadmap-section{
+  padding:30px 0 50px;
+  position:relative;
+}
+.roadmap-title{
+  text-align:center;
+  font-size:1.6rem;
+  font-weight:800;
+  margin-bottom:6px;
+}
+.roadmap-desc{
+  text-align:center;
+  color:var(--muted);
+  font-size:0.95rem;
+  margin-bottom:40px;
+}
+
+.roadmap{
+  position:relative;
+  padding:0 30px;
+}
+.roadmap::before{
+  content:"";
+  position:absolute;
+  right:50%;
+  top:0;
+  bottom:0;
+  width:3px;
+  background:linear-gradient(to bottom, var(--trace) 0%, var(--cyan) 100%);
+  transform:translateX(1.5px);
+  z-index:0;
+}
+
+.stage-label{
+  text-align:center;
+  position:relative;
+  z-index:2;
+  margin:36px 0 22px;
+}
+.stage-label span{
+  background:var(--trace);
+  color:#1A1006;
+  font-weight:800;
+  font-size:0.95rem;
+  padding:6px 18px;
+  border-radius:20px;
+  display:inline-block;
+}
+
+.node-row{
+  display:flex;
+  align-items:center;
+  position:relative;
+  margin-bottom:14px;
+  min-height:84px;
+}
+.node-row.right .node-card{ order:1; margin-left:auto; margin-right:0; text-align:right; }
+.node-row.right .spacer{ order:3; }
+.node-row.left .node-card{ order:3; margin-right:auto; margin-left:0; text-align:left; }
+.node-row.left .spacer{ order:1; }
+
+.node-card, .spacer{ width:calc(50% - 40px); flex:none; }
+
+.node-marker{
+  order:2;
+  flex:none;
+  width:64px;
+  height:64px;
+  background:var(--panel-2);
+  border:2px solid var(--trace);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  font-size:1.25rem;
+  color:var(--cyan);
+  position:relative;
+  z-index:2;
+  margin:0 8px;
+}
+.node-marker::before, .node-marker::after{
+  content:"";
+  position:absolute;
+  right:50%;
+  width:6px; height:9px;
+  background:var(--trace);
+  transform:translateX(3px);
+}
+.node-marker::before{ top:-9px; }
+.node-marker::after{ bottom:-9px; }
+
+.node-card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:14px 18px;
+}
+.node-card.capstone{
+  border:1px solid var(--trace);
+  background:linear-gradient(135deg, var(--panel) 55%, var(--panel-2));
+}
+.node-card .title{
+  font-weight:700;
+  font-size:1.05rem;
+  margin-bottom:4px;
+}
+.node-card .sessions{
+  display:inline-block;
+  font-size:0.8rem;
+  font-weight:700;
+  color:var(--bg-deep);
+  background:var(--cyan);
+  border-radius:4px;
+  padding:2px 10px;
+  margin-bottom:6px;
+}
+.node-card.capstone .sessions{
+  background:var(--trace);
+}
+.node-card .app{
+  font-size:0.82rem;
+  color:var(--muted);
+  line-height:1.8;
+  border-right:2px solid var(--cyan);
+  padding-right:8px;
+  margin-top:6px;
+}
+.node-row.left .node-card .app{
+  border-right:none;
+  border-left:2px solid var(--cyan);
+  padding-right:0;
+  padding-left:8px;
+}
+.node-card.capstone .app{ border-color:var(--trace); font-weight:600; color:var(--text); }
+
+.gap-row{
+  display:flex;
+  justify-content:center;
+  position:relative;
+  margin:8px 0;
+  z-index:2;
+}
+.gap-row .pill{
+  background:var(--bg);
+  border:1px dashed var(--trace-soft);
+  color:var(--muted);
+  font-size:0.8rem;
+  font-weight:500;
+  border-radius:14px;
+  padding:5px 16px;
+}
+
+/* ===== STRUCTURE SECTION ===== */
+.structure{
+  padding:10px 56px 50px;
+}
+.structure-title{
+  font-size:1.6rem;
+  font-weight:800;
+  text-align:center;
+  margin-bottom:34px;
+}
+.structure-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
+.structure-card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:20px 22px;
+  display:flex;
+  gap:16px;
+  align-items:flex-start;
+}
+.structure-card .icon{
+  flex:none;
+  width:46px; height:46px;
+  border-radius:8px;
+  background:var(--panel-2);
+  border:1px solid var(--trace);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--cyan);
+}
+.structure-card .icon svg{ width:24px; height:24px; }
+.structure-card h3{
+  font-size:1.05rem;
+  font-weight:700;
+  margin-bottom:6px;
+}
+.structure-card p{
+  font-size:0.9rem;
+  color:var(--muted);
+  line-height:1.9;
+}
+
+/* ===== WHY JOIN ===== */
+.why{
+  padding:10px 56px 50px;
+}
+.why-title{
+  font-size:1.6rem;
+  font-weight:800;
+  text-align:center;
+  margin-bottom:34px;
+}
+.why-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
+.why-card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:20px 22px;
+  border-right:3px solid var(--cyan);
+}
+.why-card.highlight{ border-right-color:var(--trace); }
+.why-card h3{
+  font-size:1.05rem;
+  font-weight:700;
+  margin-bottom:8px;
+}
+.why-card p{
+  font-size:0.9rem;
+  color:var(--muted);
+  line-height:1.9;
+}
+
+/* ===== TERMS SECTION ===== */
+.terms{
+  padding:10px 56px 50px;
+}
+.terms-title{
+  font-size:1.6rem;
+  font-weight:800;
+  text-align:center;
+  margin-bottom:10px;
+}
+.terms-desc{
+  text-align:center;
+  color:var(--muted);
+  font-size:0.95rem;
+  margin-bottom:34px;
+}
+.terms-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:18px;
+}
+.term-card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:22px 18px;
+  text-align:center;
+  border-top:3px solid var(--cyan);
+}
+.term-card .num{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:34px; height:34px;
+  border-radius:50%;
+  background:rgba(91,209,201,0.12);
+  color:var(--cyan);
+  font-weight:800;
+  margin-bottom:10px;
+}
+.term-card .title{
+  font-weight:700;
+  font-size:1rem;
+  margin-bottom:6px;
+}
+.term-card .desc{
+  font-size:0.85rem;
+  color:var(--muted);
+  line-height:1.8;
+}
+.term-card.highlight{
+  border-top-color:var(--trace);
+}
+.term-card.highlight .num{
+  background:rgba(232,163,61,0.14);
+  color:var(--trace);
+}
+.warning-box{
+  margin-top:20px;
+  background:rgba(255,107,107,0.06);
+  border:1px solid rgba(255,107,107,0.18);
+  border-radius:8px;
+  padding:14px 20px;
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  max-width:760px;
+  margin-left:auto;
+  margin-right:auto;
+}
+.warning-box .icon{ font-size:1.2rem; flex:none; }
+.warning-box .text{ font-size:0.85rem; color:var(--muted); line-height:1.9; }
+.warning-box .text strong{ color:var(--pulse); }
+
+@media(max-width:680px){
+  .terms-grid{ grid-template-columns:1fr; }
+}
+
+/* ===== CTA / FOOTER ===== */
+.cta{
+  background:var(--panel-2);
+  padding:46px 56px;
+  text-align:center;
+  position:relative;
+  border-top:3px solid var(--trace);
+}
+.cta h2{
+  font-size:1.8rem;
+  font-weight:900;
+  margin-bottom:10px;
+}
+.cta > p{
+  color:var(--muted);
+  font-size:1rem;
+  margin-bottom:32px;
+}
+.reg-form{
+  max-width:520px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  text-align:right;
+}
+.reg-form input, .reg-form select{
+  width:100%;
+  background:var(--panel);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:6px;
+  padding:13px 16px;
+  font-family:'Vazirmatn',sans-serif;
+  font-size:0.95rem;
+  color:var(--text);
+  outline:none;
+  transition:border-color 0.2s;
+  direction:rtl;
+}
+.reg-form input:focus, .reg-form select:focus{
+  border-color:var(--cyan);
+}
+.reg-form select option{
+  background:var(--panel);
+  color:var(--text);
+}
+.reg-form .row-2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+.reg-form button{
+  background:var(--trace);
+  color:#1A1006;
+  font-family:'Vazirmatn',sans-serif;
+  font-weight:800;
+  font-size:1.05rem;
+  padding:14px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  transition:background 0.2s;
+  margin-top:4px;
+}
+.reg-form button:hover{ background:#d4922f; }
+.success-msg{
+  display:none;
+  background:rgba(91,209,201,0.12);
+  border:1px solid var(--cyan);
+  border-radius:8px;
+  padding:22px;
+  color:var(--cyan);
+  font-weight:700;
+  font-size:1.05rem;
+  margin-top:8px;
+}
+.contact-row{
+  margin-top:28px;
+  display:flex;
+  justify-content:center;
+  gap:28px;
+  flex-wrap:wrap;
+  font-size:0.9rem;
+  color:var(--muted);
+}
+.contact-row b{ color:var(--text); }
+.tg-join{
+  margin:28px 0 10px;
+}
+.tg-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  background:#229ED9;
+  color:#fff;
+  font-family:'Vazirmatn',sans-serif;
+  font-weight:700;
+  font-size:1rem;
+  padding:13px 32px;
+  border-radius:6px;
+  text-decoration:none;
+  transition:background 0.2s;
+}
+.tg-btn:hover{ background:#1a8bbf; }
+
+@media(max-width:680px){
+  .reg-form .row-2{ grid-template-columns:1fr; }
+  .hero, .structure, .why, .cta{ padding-left:24px; padding-right:24px; }
+}
+
+.footer-brand{
+  padding:18px;
+  text-align:center;
+  font-size:0.8rem;
+  color:var(--muted);
+  background:var(--bg-deep);
+  letter-spacing:0.5px;
+}
+
+@media (max-width:680px){
+  .hero, .structure, .why, .cta{ padding-left:24px; padding-right:24px; }
+  .roadmap{ padding:0 14px; }
+  .node-row.right, .node-row.left{ flex-direction:row-reverse; }
+  .node-card, .spacer{ width:calc(100% - 80px); }
+  .node-row .spacer{ display:none; }
+  .node-row.right .node-card, .node-row.left .node-card{ order:1; margin:0; text-align:right; }
+  .node-card .app, .node-row.left .node-card .app{ border-right:2px solid var(--cyan); border-left:none; padding-right:8px; padding-left:0; }
+  .node-marker{ order:0; }
+  .roadmap::before{ right:30px; }
+  .structure-grid, .why-grid{ grid-template-columns:1fr; }
+  .stats{ justify-content:center; }
+}
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="eyebrow"><span class="chip"></span> هسته فناور دانشگاه علوم پزشکی</div>
+    <h1>بوت‌کمپ هوش مصنوعی<br>در سلامت</h1>
+    <p class="subtitle">از صفر تا ساخت محصول هوشمند پزشکی — یک مسیر گام‌به‌گام و کاملاً عملی برای ورود به دنیای هوش مصنوعی در حوزه سلامت.</p>
+
+    <div class="pulse-wrap">
+      <svg viewBox="0 0 800 46" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,23 H120 L145,23 L165,5 L185,41 L205,23 L260,23
+                 L380,23 L405,5 L425,41 L445,23 L500,23
+                 L620,23 L645,5 L665,41 L685,23 L800,23"
+              fill="none" stroke="#E8A33D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="num">۶۵</div><div class="lbl">جلسه آموزشی</div></div>
+      <div class="stat"><div class="num">۱۱</div><div class="lbl">حوزه تخصصی + ۱ مرحله نهایی</div></div>
+      <div class="stat"><div class="num">واقعی</div><div class="lbl">پروژه پایانی پزشکی</div></div>
+    </div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section class="roadmap-section">
+    <div class="roadmap-title">مسیر آموزشی</div>
+    <div class="roadmap-desc">دوازده ایستگاه، از پایه تا ساخت محصول هوشمند پزشکی</div>
+    <div class="roadmap" id="roadmap"></div>
+  </section>
+
+  <!-- COURSE STRUCTURE -->
+  <section class="structure">
+    <div class="structure-title">ساختار دوره</div>
+    <div class="structure-grid">
+      <div class="structure-card">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="1.5"/><path d="M9 9l-2 2 2 2M15 9l2 2-2 2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <div>
+          <h3>آموزش تئوری + عملی</h3>
+          <p>هر مفهوم همراه با تمرین و کدنویسی واقعی آموزش داده می‌شود؛ نه صرفاً اسلاید و تئوری.</p>
+        </div>
+      </div>
+      <div class="structure-card">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="1.5"/><path d="M3 9h18M8 2v4M16 2v4"/><circle cx="8" cy="14" r="1"/><circle cx="12" cy="14" r="1"/><circle cx="16" cy="14" r="1"/></svg>
+        </div>
+        <div>
+          <h3>۱ تا ۲ هفته تمرین بین مراحل</h3>
+          <p>فاصله کافی برای تمرین، تثبیت مفاهیم و رفع اشکال، پیش از ورود به مرحله بعد.</p>
+        </div>
+      </div>
+      <div class="structure-card">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="1.5"/><path d="M9 7h6M9 11h6M9 15h4"/><circle cx="17" cy="18" r="3"/><path d="M16 18l1 1 1.5-1.5"/></svg>
+        </div>
+        <div>
+          <h3>آزمون شفاهی پایان هر مرحله</h3>
+          <p>ارزیابی بر اساس تمرین انجام‌شده و نحوه حل مسئله، در گفت‌وگوی مستقیم با مدرس.</p>
+        </div>
+      </div>
+      <div class="structure-card">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l2 7 4-14 2 7h8"/></svg>
+        </div>
+        <div>
+          <h3>پروژه واقعی پزشکی</h3>
+          <p>مرحله نهایی دوره، ساخت یک محصول هوشمند پزشکی واقعی از ایده تا اجراست.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY JOIN -->
+  <section class="why">
+    <div class="why-title">چرا به ما بپیوندی؟</div>
+    <div class="why-grid">
+      <div class="why-card">
+        <h3>کاربردهای واقعی سلامت در هر مرحله</h3>
+        <p>هر حوزه تخصصی با یک کاربرد مشخص در داده‌های پزشکی همراه است؛ از سیگنال‌های حیاتی تا تصویربرداری و پرونده الکترونیک سلامت.</p>
+      </div>
+      <div class="why-card">
+        <h3>مسیر کامل، نه پراکنده</h3>
+        <p>از پایتون و گیت‌هاب تا یادگیری عمیق، NLP، بینایی ماشین و هوش مصنوعی مولد؛ همه در یک نقشه راه منسجم.</p>
+      </div>
+      <div class="why-card highlight">
+        <h3>فرصت همکاری 2 ساله پس از دوره پایتون</h3>
+        <p>دانشجویان علاقه‌مند می‌توانند با ۱۰ ساعت همکاری در هفته، تحت نظر منتور، در پروژه‌های پژوهشی و اجرایی هوش مصنوعی مشارکت کنند و از امتیاز پژوهشی یا مزایای مالی بهره‌مند شوند.</p>
+      </div>
+      <div class="why-card">
+        <h3>ورود به هسته فناور دانشگاه</h3>
+        <p>برترین شرکت‌کنندگان، در پایان دوره به‌عنوان عضو فعال تیم فنی هسته فناور دعوت می‌شوند.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TERMS -->
+  <section class="terms">
+    <div class="terms-title">شرایط ثبت‌نام</div>
+    <div class="terms-desc">شروع دوره بدون نیاز به تعهد است. پس از پایان دوره پایتون، سه مسیر پیش روی شماست:</div>
+    <div class="terms-grid">
+      <div class="term-card">
+        <div class="num">۱</div>
+        <div class="title">توقف رایگان</div>
+        <div class="desc">بدون هیچ هزینه‌ای می‌توانید دوره را ترک کنید.</div>
+      </div>
+      <div class="term-card">
+        <div class="num">۲</div>
+        <div class="title">ادامه بدون تعهد</div>
+        <div class="desc">با پرداخت هزینه، مسیر را بدون تعهد ادامه می‌دهید.</div>
+      </div>
+      <div class="term-card highlight">
+        <div class="num">۳ ⭐</div>
+        <div class="title">تعهد و مشارکت</div>
+        <div class="desc">با پذیرفتن تعهد، ادامه دوره کاملاً رایگان خواهد بود.</div>
+      </div>
+    </div>
+    <div class="warning-box">
+      <span class="icon">⚠️</span>
+      <div class="text"><strong>هشدار:</strong> این دوره برای افراد با پشتکار و انگیزه بالا طراحی شده است. مناسب افرادی که به دنبال مدرک بدون یادگیری هستند، نیست.</div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <h2>به جمع ما بپیوند</h2>
+    <p>ثبت‌نام محدود است — همین حالا فرم را پر کن و مسیر را شروع کن.</p>
+
+    <form class="reg-form" id="regForm">
+      <input type="text" name="نام و نام خانوادگی" placeholder="نام و نام خانوادگی" required />
+      <div class="row-2">
+        <input type="tel" name="شماره تماس" placeholder="شماره تماس" required />
+        <input type="text" name="رشته تحصیلی" placeholder="رشته تحصیلی" required />
+      </div>
+      <select name="مقطع تحصیلی" required>
+        <option value="" disabled selected>مقطع تحصیلی</option>
+        <option>کارشناسی</option>
+        <option>کارشناسی ارشد</option>
+        <option>دکتری</option>
+        <option>دستیار / رزیدنت</option>
+        <option>سایر</option>
+      </select>
+      <input type="email" name="ایمیل" placeholder="ایمیل (اختیاری)" />
+      <button type="submit">ثبت‌نام در بوت‌کمپ ←</button>
+    </form>
+    <div class="success-msg" id="successMsg">✓ ثبت‌نام شما با موفقیت انجام شد! به زودی با شما تماس می‌گیریم.</div>
+
+    <div class="tg-join">
+      <a href="https://t.me/+Vvt8pXuknrtkMzg8" target="_blank" class="tg-btn">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L8.32 14.617l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.496.969z"/></svg>
+        عضویت در گروه تلگرام دوره
+      </a>
+    </div>
+
+    <div class="contact-row">
+      <div>📅 مهلت ثبت‌نام: <b>۱۵ تیر ۱۴۰۵</b></div>
+      <div>🗓️ شروع دوره: <b>۲۱ تیر ۱۴۰۵ (یکشنبه)</b></div>
+      <div>📍 <b>مرکز رشد دانشگاه علوم پزشکی</b></div>
+    </div>
+    <div class="contact-row" style="margin-top:10px;">
+      <div>📞 تماس: <b>۰۹۱۶۸۳۰۹۹۴۸ — ۰۹۳۸۱۴۵۴۶۰۰</b></div>
+      <div>اطلاعات بیشتر: <b>@Aaa0001000</b></div>
+    </div>
+  </section>
+
+  <div class="footer-brand">هسته فناور دانشگاه — توانمندسازی نسل بعدی متخصصان هوش مصنوعی در سلامت</div>
+</div>
+
+<script>
+const stages = [
+  {
+    label: "مبانی برنامه‌نویسی و علم داده",
+    items: [
+      { n:"۰۱", title:"پایتون", sessions:"۵", app:"کاربرد: ابزار پایه برای تحلیل داده‌های بالینی" },
+      { n:"۰۲", title:"تحلیل داده", sessions:"۸", app:"کاربرد: تحلیل پرونده‌های الکترونیک سلامت (EHR)" },
+      { n:"۰۳", title:"یادگیری ماشین", sessions:"۸", app:"کاربرد: پیش‌بینی ریسک و تشخیص زودهنگام بیماری" },
+      { n:"۰۴", title:"یادگیری عمیق", sessions:"۱۰", app:"کاربرد: مدل‌های پیچیده تشخیص و پیش‌آگهی" },
+    ]
+  },
+  {
+    label: "هوش مصنوعی تخصصی برای داده‌های سلامت",
+    items: [
+      { n:"۰۵", title:"پردازش سیگنال", sessions:"۴", app:"کاربرد: تحلیل سیگنال‌های حیاتی مانند ECG و EEG" },
+      { n:"۰۶", title:"سری زمانی", sessions:"۴", app:"کاربرد: پیش‌بینی روند بیماری و علائم حیاتی" },
+      { n:"۰۷", title:"پردازش زبان طبیعی", sessions:"۴", app:"کاربرد: پردازش گزارش‌ها و پرونده‌های پزشکی" },
+      { n:"۰۸", title:"هوش مصنوعی مولد", sessions:"۴", app:"کاربرد: تولید گزارش و خلاصه پزشکی هوشمند" },
+      { n:"۰۹", title:"پردازش تصویر", sessions:"۴", app:"کاربرد: تحلیل تصاویر پزشکی (رادیولوژی، پاتولوژی)" },
+      { n:"۱۰", title:"سیستم توصیه‌گر", sessions:"۴", app:"کاربرد: توصیه درمان و پیگیری روند بیمار" },
+    ]
+  },
+  {
+    label: "از مهارت تا محصول پزشکی",
+    items: [
+      { n:"۱۱", title:"گیت‌هاب", sessions:"۴", app:"کاربرد: مدیریت نسخه پروژه‌های سلامت دیجیتال" },
+      { n:"۱۲", title:"ساخت محصول هوشمند پزشکی", sessions:"۶", app:"پروژه واقعی پزشکی — از ایده تا محصول", capstone:true, label:"مرحله نهایی" },
+    ]
+  }
+];
+
+const root = document.getElementById('roadmap');
+let globalIndex = 0;
+const totalItems = stages.reduce((a, s) => a + s.items.length, 0);
+
+stages.forEach(stage => {
+  const label = document.createElement('div');
+  label.className = 'stage-label';
+  label.innerHTML = `<span>${stage.label}</span>`;
+  root.appendChild(label);
+
+  stage.items.forEach(item => {
+    const side = globalIndex % 2 === 0 ? 'right' : 'left';
+    const row = document.createElement('div');
+    row.className = `node-row ${side}`;
+    row.innerHTML = `
+      <div class="spacer"></div>
+      <div class="node-marker">${item.capstone ? '★' : item.n}</div>
+      <div class="node-card ${item.capstone ? 'capstone' : ''}">
+        ${item.label ? `<div class="app" style="border:none;padding:0;margin-bottom:4px;color:var(--trace);font-weight:700;">${item.label}</div>` : ''}
+        <div class="title">${item.title}</div>
+        <span class="sessions">${item.sessions} جلسه</span>
+        <div class="app">${item.app}</div>
+      </div>
+    `;
+    root.appendChild(row);
+    globalIndex++;
+
+    if (globalIndex < totalItems) {
+      const gap = document.createElement('div');
+      gap.className = 'gap-row';
+      gap.innerHTML = `<div class="pill">۱ تا ۲ هفته تمرین و آزمون شفاهی</div>`;
+      root.appendChild(gap);
+    }
+  });
+});
+</script>
+<script>
+// فرم ثبت‌نام — ارسال به Formspree
+document.getElementById('regForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const form = e.target;
+  const btn = form.querySelector('button');
+  btn.textContent = 'در حال ارسال...';
+  btn.disabled = true;
+
+  const data = new FormData(form);
+
+  try {
+    const res = await fetch('https://formspree.io/f/xeebpzoz', {
+      method: 'POST',
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (res.ok) {
+      form.style.display = 'none';
+      document.getElementById('successMsg').style.display = 'block';
+    } else {
+      btn.textContent = 'خطا در ارسال — دوباره تلاش کن';
+      btn.disabled = false;
+    }
+  } catch(err) {
+    btn.textContent = 'خطا در ارسال — دوباره تلاش کن';
+    btn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>
