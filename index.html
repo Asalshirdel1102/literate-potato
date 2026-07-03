@@ -357,6 +357,84 @@ h1{
   line-height:1.9;
 }
 
+/* ===== TERMS SECTION ===== */
+.terms{
+  padding:10px 56px 50px;
+}
+.terms-title{
+  font-size:1.6rem;
+  font-weight:800;
+  text-align:center;
+  margin-bottom:10px;
+}
+.terms-desc{
+  text-align:center;
+  color:var(--muted);
+  font-size:0.95rem;
+  margin-bottom:34px;
+}
+.terms-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:18px;
+}
+.term-card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:22px 18px;
+  text-align:center;
+  border-top:3px solid var(--cyan);
+}
+.term-card .num{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:34px; height:34px;
+  border-radius:50%;
+  background:rgba(91,209,201,0.12);
+  color:var(--cyan);
+  font-weight:800;
+  margin-bottom:10px;
+}
+.term-card .title{
+  font-weight:700;
+  font-size:1rem;
+  margin-bottom:6px;
+}
+.term-card .desc{
+  font-size:0.85rem;
+  color:var(--muted);
+  line-height:1.8;
+}
+.term-card.highlight{
+  border-top-color:var(--trace);
+}
+.term-card.highlight .num{
+  background:rgba(232,163,61,0.14);
+  color:var(--trace);
+}
+.warning-box{
+  margin-top:20px;
+  background:rgba(255,107,107,0.06);
+  border:1px solid rgba(255,107,107,0.18);
+  border-radius:8px;
+  padding:14px 20px;
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  max-width:760px;
+  margin-left:auto;
+  margin-right:auto;
+}
+.warning-box .icon{ font-size:1.2rem; flex:none; }
+.warning-box .text{ font-size:0.85rem; color:var(--muted); line-height:1.9; }
+.warning-box .text strong{ color:var(--pulse); }
+
+@media(max-width:680px){
+  .terms-grid{ grid-template-columns:1fr; }
+}
+
 /* ===== CTA / FOOTER ===== */
 .cta{
   background:var(--panel-2);
@@ -496,7 +574,7 @@ h1{
 
   <!-- HERO -->
   <section class="hero">
-    <div class="eyebrow"><span class="chip"></span> هسته فناور دانشگاه</div>
+    <div class="eyebrow"><span class="chip"></span> هسته فناور دانشگاه علوم پزشکی</div>
     <h1>بوت‌کمپ هوش مصنوعی<br>در سلامت</h1>
     <p class="subtitle">از صفر تا ساخت محصول هوشمند پزشکی — یک مسیر گام‌به‌گام و کاملاً عملی برای ورود به دنیای هوش مصنوعی در حوزه سلامت.</p>
 
@@ -589,6 +667,33 @@ h1{
     </div>
   </section>
 
+  <!-- TERMS -->
+  <section class="terms">
+    <div class="terms-title">شرایط ثبت‌نام</div>
+    <div class="terms-desc">شروع دوره بدون نیاز به تعهد است. پس از پایان دوره پایتون، سه مسیر پیش روی شماست:</div>
+    <div class="terms-grid">
+      <div class="term-card">
+        <div class="num">۱</div>
+        <div class="title">توقف رایگان</div>
+        <div class="desc">بدون هیچ هزینه‌ای می‌توانید دوره را ترک کنید.</div>
+      </div>
+      <div class="term-card">
+        <div class="num">۲</div>
+        <div class="title">ادامه بدون تعهد</div>
+        <div class="desc">با پرداخت هزینه، مسیر را بدون تعهد ادامه می‌دهید.</div>
+      </div>
+      <div class="term-card highlight">
+        <div class="num">۳ ⭐</div>
+        <div class="title">تعهد و مشارکت</div>
+        <div class="desc">با پذیرفتن تعهد، ادامه دوره کاملاً رایگان خواهد بود.</div>
+      </div>
+    </div>
+    <div class="warning-box">
+      <span class="icon">⚠️</span>
+      <div class="text"><strong>هشدار:</strong> این دوره برای افراد با پشتکار و انگیزه بالا طراحی شده است. مناسب افرادی که به دنبال مدرک بدون یادگیری هستند، نیست.</div>
+    </div>
+  </section>
+
   <!-- CTA -->
   <section class="cta">
     <h2>به جمع ما بپیوند</h2>
@@ -621,9 +726,13 @@ h1{
     </div>
 
     <div class="contact-row">
-      <div>تماس: <b>۰۹۱۶۸۳۰۹۹۴۸ — ۰۹۳۸۱۴۵۴۶۰۰</b></div>
-      <div>مهلت ثبت‌نام: <b>1405/04/15</b></div>
-      <div>اطلاعات بیشتر: <b>Aaa0001000</b></div>
+      <div>📅 مهلت ثبت‌نام: <b>۱۵ تیر ۱۴۰۵</b></div>
+      <div>🗓️ شروع دوره: <b>۲۱ تیر ۱۴۰۵ (یکشنبه)</b></div>
+      <div>📍 <b>مرکز رشد دانشگاه علوم پزشکی</b></div>
+    </div>
+    <div class="contact-row" style="margin-top:10px;">
+      <div>📞 تماس: <b>۰۹۱۶۸۳۰۹۹۴۸ — ۰۹۳۸۱۴۵۴۶۰۰</b></div>
+      <div>اطلاعات بیشتر: <b>@Aaa0001000</b></div>
     </div>
   </section>
 
