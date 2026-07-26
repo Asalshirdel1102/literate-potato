@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ثبت‌نام | بوت‌کمپ هوش مصنوعی در سلامت</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-deep: #071026;
+    --navy: #0c1c3a;
+    --navy-light: #142a52;
+    --gold: #d4a94f;
+    --gold-light: #ecd08a;
+    --ink: #eef1f8;
+    --ink-dim: #9fb0cc;
+    --py-blue: #2f6fb3;
+    --error: #e06666;
+    --ok: #4fae7c;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: radial-gradient(ellipse at top left, #0f2148 0%, var(--navy-deep) 55%, #050b1a 100%);
+    color: var(--ink);
+    font-family: 'Vazirmatn', sans-serif;
+    min-height: 100%;
+  }
+
+  .wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 36px 18px 60px;
+  }
+
+  /* --- signature element: code-tab header, echoing the laptop screen on the poster --- */
+  .tab-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #0a1730;
+    border: 1px solid rgba(212,169,79,0.25);
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
+    padding: 10px 14px;
+    direction: ltr;
+  }
+  .tab-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .tab-dot.r { background: #e0665f; }
+  .tab-dot.y { background: #e3b94f; }
+  .tab-dot.g { background: #4fae7c; }
+  .tab-file {
+    margin-inline-start: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: var(--ink-dim);
+    letter-spacing: 0.2px;
+  }
+  .tab-file span { color: var(--gold-light); }
+
+  .card {
+    background: linear-gradient(180deg, var(--navy) 0%, #0a1a38 100%);
+    border: 1px solid rgba(212,169,79,0.25);
+    border-radius: 0 0 var(--radius) var(--radius);
+    padding: 30px 26px 34px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(212,169,79,0.12);
+    border: 1px solid rgba(212,169,79,0.4);
+    color: var(--gold-light);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 18px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 800;
+    margin: 0 0 6px;
+    line-height: 1.5;
+    background: linear-gradient(90deg, #ffffff, var(--gold-light));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .sub {
+    color: var(--ink-dim);
+    font-size: 14.5px;
+    margin: 0 0 22px;
+    line-height: 1.9;
+  }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212,169,79,0.5), transparent);
+    margin: 22px 0;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 26px;
+  }
+  .meta-chip {
+    flex: 1 1 140px;
+    background: rgba(255,255,255,0.03);
+    border: 1px dashed rgba(212,169,79,0.35);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 12.5px;
+    color: var(--ink-dim);
+  }
+  .meta-chip b {
+    display: block;
+    color: var(--ink);
+    font-size: 13.5px;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+  .meta-chip .mono { font-family: 'JetBrains Mono', monospace; }
+
+  label {
+    display: block;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--gold-light);
+    margin-bottom: 7px;
+  }
+  .req { color: var(--error); margin-inline-start: 3px; }
+
+  .field { margin-bottom: 18px; }
+
+  input[type="text"],
+  input[type="tel"],
+  input[type="email"],
+  select,
+  textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: var(--ink);
+    font-family: 'Vazirmatn', sans-serif;
+    font-size: 14.5px;
+    padding: 12px 14px;
+    border-radius: 9px;
+    outline: none;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  input::placeholder, textarea::placeholder { color: #5f6f8f; }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--gold);
+    background: rgba(255,255,255,0.06);
+  }
+
+  select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'><path d='M1 1l6 6 6-6' stroke='%23d4a94f' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat: no-repeat;
+    background-position: left 14px center;
+    padding-left: 34px;
+  }
+  select option { background: var(--navy); color: var(--ink); }
+
+  .radio-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .radio-pill {
+    position: relative;
+  }
+  .radio-pill input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    cursor: pointer;
+  }
+  .radio-pill span {
+    display: inline-block;
+    padding: 9px 16px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.15);
+    font-size: 13.5px;
+    color: var(--ink-dim);
+    background: rgba(255,255,255,0.03);
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .radio-pill input:checked + span {
+    border-color: var(--gold);
+    color: var(--navy-deep);
+    background: var(--gold-light);
+    font-weight: 600;
+  }
+
+  .hint { font-size: 12px; color: var(--ink-dim); margin-top: 6px; line-height: 1.7; }
+
+  .consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 13px 14px;
+    margin: 22px 0 24px;
+  }
+  .consent input { margin-top: 3px; accent-color: var(--gold); flex-shrink: 0; }
+  .consent label { font-size: 13px; color: var(--ink-dim); font-weight: 400; margin: 0; }
+
+  button.submit {
+    width: 100%;
+    background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%);
+    color: var(--navy-deep);
+    font-family: 'Vazirmatn', sans-serif;
+    font-weight: 800;
+    font-size: 15.5px;
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    cursor: pointer;
+    transition: transform 0.12s, box-shadow 0.12s;
+    box-shadow: 0 8px 24px rgba(212,169,79,0.25);
+  }
+  button.submit:hover { transform: translateY(-1px); box-shadow: 0 10px 30px rgba(212,169,79,0.35); }
+  button.submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  .error-msg {
+    font-size: 12px;
+    color: var(--error);
+    margin-top: 5px;
+    display: none;
+  }
+  .field.invalid input, .field.invalid select { border-color: var(--error); }
+  .field.invalid .error-msg { display: block; }
+
+  .status {
+    display: none;
+    margin-top: 18px;
+    padding: 14px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    line-height: 1.8;
+    text-align: center;
+  }
+  .status.ok {
+    display: block;
+    background: rgba(79,174,124,0.12);
+    border: 1px solid rgba(79,174,124,0.4);
+    color: #a7e3c3;
+  }
+
+  footer {
+    text-align: center;
+    margin-top: 22px;
+    font-size: 12px;
+    color: var(--ink-dim);
+  }
+  footer a { color: var(--gold-light); text-decoration: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="tab-bar">
+    <div class="tab-dot r"></div>
+    <div class="tab-dot y"></div>
+    <div class="tab-dot g"></div>
+    <div class="tab-file">register<span>.session01</span>.py</div>
+  </div>
+
+  <div class="card">
+    <div class="eyebrow">📅 جلسه اول و دوم — مبانی پایتون</div>
+    <h1>ثبت‌نام بوت‌کمپ هوش مصنوعی در سلامت</h1>
+    <p class="sub">با رویکرد کاربردی در هوش مصنوعی — از صفر شروع کن؛ به آینده‌ای هوشمند برس.</p>
+
+    <div class="meta-row">
+      <div class="meta-chip">تاریخ برگزاری<b class="mono">۱۴ و ۱۵ مرداد</b></div>
+      <div class="meta-chip">ساعت<b class="mono">۲۰:۰۰ – ۲۲:۰۰</b></div>
+      <div class="meta-chip">بستر<b>Google Meet</b></div>
+    </div>
+
+    <!--
+      برای فعال‌سازی: آدرس action زیر رو با آدرس Formspree خودتون جایگزین کنید
+      مثال: https://formspree.io/f/xxxxabcd
+    -->
+    <form id="regForm" action="https://formspree.io/f/mykrlelz" method="POST" novalidate>
+
+      <div class="field" data-field="fullname">
+        <label>نام و نام خانوادگی<span class="req">*</span></label>
+        <input type="text" name="fullname" placeholder="مثلاً: سارا محمدی">
+        <div class="error-msg">لطفاً نام و نام خانوادگی را وارد کنید.</div>
+      </div>
+
+      <div class="field" data-field="phone">
+        <label>شماره تماس / واتساپ<span class="req">*</span></label>
+        <input type="tel" name="phone" placeholder="۰۹xxxxxxxxx" dir="ltr" style="text-align:right">
+        <div class="error-msg">شماره تماس معتبر وارد کنید.</div>
+      </div>
+
+      <div class="field" data-field="email">
+        <label>ایمیل</label>
+        <input type="email" name="email" placeholder="example@mail.com" dir="ltr" style="text-align:right">
+        <div class="error-msg">ایمیل وارد شده معتبر نیست.</div>
+      </div>
+
+      <div class="field" data-field="level">
+        <label>سطح آشنایی با پایتون<span class="req">*</span></label>
+        <select name="level">
+          <option value="">انتخاب کنید...</option>
+          <option value="beginner">مبتدی — تا حالا کدنویسی نکرده‌ام</option>
+          <option value="basic">آشنای مقدماتی — کمی سینتکس دیده‌ام</option>
+          <option value="intermediate">متوسط — پروژه کوچک نوشته‌ام</option>
+        </select>
+        <div class="error-msg">لطفاً سطح خود را انتخاب کنید.</div>
+      </div>
+
+      <div class="field">
+        <label>نحوه آشنایی با بوت‌کمپ</label>
+        <div class="radio-group">
+          <label class="radio-pill"><input type="radio" name="source" value="telegram"><span>تلگرام</span></label>
+          <label class="radio-pill"><input type="radio" name="source" value="instagram"><span>اینستاگرام</span></label>
+          <label class="radio-pill"><input type="radio" name="source" value="friend"><span>معرفی دوستان</span></label>
+          <label class="radio-pill"><input type="radio" name="source" value="university"><span>دانشگاه</span></label>
+          <label class="radio-pill"><input type="radio" name="source" value="other"><span>سایر</span></label>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:18px;">
+        <label>سوال یا انتظار خاصی از دوره دارید؟</label>
+        <textarea name="note" rows="3" placeholder="اختیاری..."></textarea>
+      </div>
+
+      <div class="consent">
+        <input type="checkbox" id="consent" name="consent">
+        <label for="consent">اطلاعات من صرفاً برای هماهنگی جلسات بوت‌کمپ استفاده می‌شود و با کسی به اشتراک گذاشته نمی‌شود.<span class="req">*</span></label>
+      </div>
+
+      <button type="submit" class="submit" id="submitBtn">ثبت‌نام در جلسه اول و دوم</button>
+
+      <div class="status" id="status"></div>
+    </form>
+
+    <div class="divider"></div>
+    <footer>
+      سوالی دارید؟ در تلگرام پیام بدهید — <a href="https://asalshirdel1102.github.io" target="_blank" rel="noopener">وب‌سایت بوت‌کمپ</a>
+    </footer>
+  </div>
+</div>
+
+<script>
+const form = document.getElementById('regForm');
+const statusBox = document.getElementById('status');
+const submitBtn = document.getElementById('submitBtn');
+
+function setError(fieldName, show) {
+  const el = form.querySelector(`[data-field="${fieldName}"]`);
+  if (el) el.classList.toggle('invalid', show);
+}
+
+function validate(data) {
+  let valid = true;
+  if (!data.fullname.trim()) { setError('fullname', true); valid = false; } else setError('fullname', false);
+
+  const phoneOk = /^0?9\d{9}$/.test(data.phone.replace(/\s|-/g, ''));
+  if (!phoneOk) { setError('phone', true); valid = false; } else setError('phone', false);
+
+  if (data.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) { setError('email', true); valid = false; } else setError('email', false);
+
+  if (!data.level) { setError('level', true); valid = false; } else setError('level', false);
+
+  return valid;
+}
+
+function showErrorStatus(message) {
+  statusBox.className = 'status';
+  statusBox.style.display = 'block';
+  statusBox.style.background = 'rgba(224,102,102,0.12)';
+  statusBox.style.border = '1px solid rgba(224,102,102,0.4)';
+  statusBox.style.color = '#f2a6a6';
+  statusBox.textContent = message;
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fd = new FormData(form);
+  const data = Object.fromEntries(fd.entries());
+  data.consent = form.querySelector('#consent').checked;
+
+  if (!validate(data)) {
+    statusBox.className = 'status';
+    statusBox.style.display = 'none';
+    return;
+  }
+  if (!data.consent) {
+    showErrorStatus('برای ثبت‌نام باید با نگهداری اطلاعات موافقت کنید.');
+    return;
+  }
+
+  const endpoint = form.getAttribute('action');
+  if (endpoint.includes('YOUR_FORM_ID')) {
+    showErrorStatus('⚠️ آدرس Formspree هنوز تنظیم نشده. لطفاً action فرم را با آدرس واقعی جایگزین کنید.');
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'در حال ثبت...';
+
+  try {
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      body: fd,
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (res.ok) {
+      statusBox.className = 'status ok';
+      statusBox.style.display = 'block';
+      statusBox.innerHTML = `✅ ثبت‌نام شما با موفقیت انجام شد، <b>${data.fullname}</b>!<br>لینک ورود به جلسه از طریق تلگرام برای شما ارسال می‌شود.`;
+      form.reset();
+    } else {
+      throw new Error('submit failed');
+    }
+  } catch (err) {
+    showErrorStatus('مشکلی در ارسال پیش آمد. لطفاً دوباره تلاش کنید یا از طریق تلگرام پیام دهید.');
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'ثبت‌نام در جلسه اول و دوم';
+  }
+});
+</script>
+</body>
+</html>
