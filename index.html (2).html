@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ثبت‌نام | بوت‌کمپ هوش مصنوعی در سلامت</title>
+<style>
+  :root{
+    --bg:#0d1117;
+    --panel:#111820;
+    --panel-2:#0a0f14;
+    --line:#1f2a33;
+    --text:#e6edf3;
+    --text-dim:#8b98a5;
+    --accent:#7ee787;
+    --accent-2:#58a6ff;
+    --danger:#f78166;
+    --mono: 'JetBrains Mono','Fira Code',ui-monospace,Consolas,monospace;
+    --sans: 'Vazirmatn','IRANSans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 15% 0%, rgba(88,166,255,0.08), transparent 40%),
+      radial-gradient(circle at 85% 100%, rgba(126,231,135,0.06), transparent 45%),
+      var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    min-height:100vh;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding:48px 16px 80px;
+    line-height:1.7;
+  }
+  .wrap{ width:100%; max-width:640px; }
+
+  .titlebar{
+    display:flex; align-items:center; gap:8px;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-bottom:none;
+    border-radius:12px 12px 0 0;
+    padding:12px 16px;
+  }
+  .dot{ width:11px; height:11px; border-radius:50%; }
+  .dot.r{background:#ff5f56;} .dot.y{background:#ffbd2e;} .dot.g{background:#27c93f;}
+  .filename{
+    margin-inline-start:10px;
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--text-dim);
+    direction:ltr;
+  }
+
+  .badge{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--accent);
+    background:rgba(126,231,135,0.08);
+    border:1px solid rgba(126,231,135,0.25);
+    padding:5px 12px;
+    border-radius:999px;
+    margin-bottom:18px;
+  }
+
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:0 0 12px 12px;
+    padding:36px 32px 32px;
+  }
+
+  h1{
+    font-size:26px;
+    font-weight:700;
+    letter-spacing:-0.01em;
+    margin-bottom:10px;
+  }
+  .sub{
+    color:var(--text-dim);
+    font-size:15px;
+    margin-bottom:26px;
+  }
+
+  .meta{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin-bottom:30px;
+  }
+  .meta-item{
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:12px 14px;
+  }
+  .meta-label{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--accent-2);
+    display:block;
+    margin-bottom:6px;
+  }
+  .meta-value{
+    font-size:14px;
+    font-weight:600;
+  }
+
+  form{ display:flex; flex-direction:column; gap:18px; }
+
+  .field label{
+    display:block;
+    font-size:13.5px;
+    font-weight:600;
+    margin-bottom:7px;
+    color:var(--text);
+  }
+  .field label .req{ color:var(--danger); margin-inline-start:3px; }
+
+  input[type="text"],
+  input[type="tel"],
+  input[type="email"],
+  select,
+  textarea{
+    width:100%;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    color:var(--text);
+    border-radius:9px;
+    padding:11px 13px;
+    font-size:14.5px;
+    font-family:var(--sans);
+    transition:border-color .15s, box-shadow .15s;
+    outline:none;
+  }
+  textarea{ resize:vertical; min-height:80px; }
+  input::placeholder, textarea::placeholder{ color:#4c5a66; }
+
+  input:focus, select:focus, textarea:focus{
+    border-color:var(--accent-2);
+    box-shadow:0 0 0 3px rgba(88,166,255,0.15);
+  }
+
+  select{ appearance:none; -webkit-appearance:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238b98a5' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat:no-repeat;
+    background-position:left 12px center;
+    padding-inline-end:36px;
+  }
+
+  .hint{ font-size:12px; color:var(--text-dim); margin-top:5px; }
+
+  .radio-group, .checkbox-group{
+    display:flex; flex-wrap:wrap; gap:10px;
+  }
+  .pill{
+    position:relative;
+  }
+  .pill input{ position:absolute; opacity:0; inset:0; cursor:pointer; }
+  .pill span{
+    display:inline-block;
+    padding:8px 16px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    font-size:13.5px;
+    color:var(--text-dim);
+    background:var(--panel-2);
+    transition:all .15s;
+    cursor:pointer;
+  }
+  .pill input:checked + span{
+    border-color:var(--accent);
+    color:var(--accent);
+    background:rgba(126,231,135,0.08);
+  }
+  .pill input:focus-visible + span{
+    box-shadow:0 0 0 3px rgba(88,166,255,0.25);
+  }
+
+  .consent{
+    display:flex; align-items:flex-start; gap:10px;
+    font-size:13px;
+    color:var(--text-dim);
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:9px;
+    padding:13px 14px;
+  }
+  .consent input{ margin-top:3px; accent-color:var(--accent); flex-shrink:0; }
+
+  button.submit{
+    margin-top:6px;
+    background:var(--accent);
+    color:#0a0f14;
+    border:none;
+    border-radius:10px;
+    padding:14px 20px;
+    font-size:15.5px;
+    font-weight:700;
+    font-family:var(--sans);
+    cursor:pointer;
+    transition:filter .15s, transform .1s;
+  }
+  button.submit:hover{ filter:brightness(1.08); }
+  button.submit:active{ transform:scale(0.99); }
+  button.submit:focus-visible{ outline:3px solid var(--accent-2); outline-offset:2px; }
+
+  .footer-note{
+    text-align:center;
+    color:var(--text-dim);
+    font-size:13px;
+    margin-top:22px;
+  }
+  .footer-note a{ color:var(--accent-2); text-decoration:none; }
+  .footer-note a:hover{ text-decoration:underline; }
+
+  @media (max-width:520px){
+    .meta{ grid-template-columns:1fr; }
+    .card{ padding:26px 18px 24px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="titlebar">
+    <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+    <span class="filename">register.session04.py</span>
+  </div>
+
+  <div class="card">
+    <span class="badge">📅 جلسه چهارم — بوت‌کمپ هوش مصنوعی در سلامت</span>
+
+    <h1>ثبت‌نام جلسه چهارم</h1>
+    <p class="sub">با رویکرد کاربردی در هوش مصنوعی — از صفر شروع کن؛ به آینده‌ای هوشمند برس.</p>
+
+    <div class="meta">
+      <div class="meta-item">
+        <span class="meta-label">تاریخ برگزاری</span>
+        <span class="meta-value">یکشنبه، ۲۵ مرداد</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">ساعت</span>
+        <span class="meta-value">۱۵:۰۰ – ۱۷:۰۰</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">مکان</span>
+        <span class="meta-value">سالن شورای EDC</span>
+      </div>
+    </div>
+
+    <form action="https://formspree.io/f/mjybrweg" method="POST">
+      <div class="field">
+        <label>نام و نام خانوادگی<span class="req">*</span></label>
+        <input type="text" name="fullname" placeholder="مثلاً: مریم احمدی" required>
+        <div class="hint">لطفاً نام و نام خانوادگی را وارد کنید.</div>
+      </div>
+
+      <div class="field">
+        <label>شماره تماس / واتساپ<span class="req">*</span></label>
+        <input type="tel" name="phone" placeholder="09xxxxxxxxx" required>
+        <div class="hint">شماره تماس معتبر وارد کنید.</div>
+      </div>
+
+      <div class="field">
+        <label>ایمیل</label>
+        <input type="email" name="email" placeholder="you@example.com">
+        <div class="hint">ایمیل وارد شده معتبر نیست.</div>
+      </div>
+
+      <div class="field">
+        <label>کد ملی<span class="req">*</span></label>
+        <input type="text" name="national_id" inputmode="numeric" maxlength="10" placeholder="مثلاً: 0012345678" required>
+        <div class="hint">برای صدور گواهی پایان دوره لازم است.</div>
+      </div>
+
+      <div class="field">
+        <label>شماره دانشجویی</label>
+        <input type="text" name="student_id" placeholder="در صورت دانشجو بودن وارد کنید">
+        <div class="hint">اختیاری — در صورت دانشجو بودن، برای درج در گواهی وارد کنید.</div>
+      </div>
+
+      <div class="field">
+        <label>سطح آشنایی با پایتون<span class="req">*</span></label>
+        <select name="level" required>
+          <option value="" selected disabled>انتخاب کنید...</option>
+          <option value="مبتدی">مبتدی — تا حالا کدنویسی نکرده‌ام</option>
+          <option value="آشنای مقدماتی">آشنای مقدماتی — کمی سینتکس دیده‌ام</option>
+          <option value="متوسط">متوسط — پروژه کوچک نوشته‌ام</option>
+        </select>
+        <div class="hint">لطفاً سطح خود را انتخاب کنید.</div>
+      </div>
+
+      <div class="field">
+        <label>نحوه آشنایی با بوت‌کمپ</label>
+        <div class="radio-group">
+          <label class="pill"><input type="radio" name="source" value="تلگرام"><span>تلگرام</span></label>
+          <label class="pill"><input type="radio" name="source" value="اینستاگرام"><span>اینستاگرام</span></label>
+          <label class="pill"><input type="radio" name="source" value="معرفی دوستان"><span>معرفی دوستان</span></label>
+          <label class="pill"><input type="radio" name="source" value="دانشگاه"><span>دانشگاه</span></label>
+          <label class="pill"><input type="radio" name="source" value="سایر"><span>سایر</span></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>سوال یا انتظار خاصی از دوره دارید؟</label>
+        <textarea name="expectation" placeholder="اختیاری..."></textarea>
+      </div>
+
+      <label class="consent">
+        <input type="checkbox" name="consent" required>
+        <span>اطلاعات من صرفاً برای هماهنگی جلسات بوت‌کمپ استفاده می‌شود و با کسی به اشتراک گذاشته نمی‌شود.<span class="req">*</span></span>
+      </label>
+
+      <button type="submit" class="submit">ثبت‌نام در جلسه چهارم</button>
+    </form>
+
+    <p class="footer-note">
+      سوالی دارید؟ در تلگرام پیام بدهید — <a href="https://asalshirdel1102.github.io" target="_blank" rel="noopener">وب‌سایت بوت‌کمپ</a>
+    </p>
+  </div>
+</div>
+</body>
+</html>
